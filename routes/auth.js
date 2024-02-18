@@ -1,6 +1,7 @@
 import { Router } from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import {generateToken} from "../services/token.service.js";
 
 const router = Router();
 
@@ -43,7 +44,8 @@ router.post("/login", async (req, res) => {
         return
     }
 
-    console.log(existUser);
+    const token = generateToken(existUser._id)
+    res.cookie('token', token, {secure: true})
     res.redirect("/")
 })
 
@@ -76,6 +78,8 @@ router.post("/register", async (req, res) => {
         password: hashPassword
     }
     const user = await User.create(userData)
+    const token = generateToken(user._id)
+    res.cookie('token', token, {secure: true}) 
     res.redirect("/")
 })
 
