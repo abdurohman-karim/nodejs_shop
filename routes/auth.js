@@ -6,6 +6,10 @@ import {generateToken} from "../services/token.service.js";
 const router = Router();
 
 router.get("/login", (req, res) => {
+    if(req.cookies.token) {
+        res.redirect('/')
+        return
+    }
     res.render("login", {
         title: "Login | My Store",
         isLogin: true,
@@ -13,11 +17,20 @@ router.get("/login", (req, res) => {
     })
 })
 router.get("/register", (req, res) => {
+    if(req.cookies.token) {
+        res.redirect('/')
+        return
+    }
     res.render("register", {
         title: "Register | My Store",
         isRegister: true,
         registerError: req.flash('registerError')
     })
+})
+
+router.get('/logout', (req, res) => {
+    res.clearCookie('token')
+    res.redirect('/login')
 })
 
 // Login
