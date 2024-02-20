@@ -26,18 +26,22 @@
     {{/if}}
   </ul>
 
-  <div class="col-md-3 text-end">
-    {{#if isLogin}}
-      <a href="/login" class="btn btn-sm text-primary me-2 btn-outline-dark">Login</a>
-    {{else}}
-      <a href="/login" class="btn btn-sm text-white me-2 btn-outline-dark">Login</a>
-    {{/if}}
+  {{#if token}}
+    <a href="/login" class="btn btn-sm me-2 text-white">Logout</a>
+  {{else}}
+    <div class="col-md-3 text-end">
+      {{#if isLogin}}
+        <a href="/login" class="btn btn-sm text-primary me-2 btn-outline-dark">Login</a>
+      {{else}}
+        <a href="/login" class="btn btn-sm text-white me-2 btn-outline-dark">Login</a>
+      {{/if}}
 
-    {{#if isRegister}}
-      <a href="/register" class="btn btn-sm btn-outline-primary">Register</a>
-    {{else}}
-      <a href="/register" class="btn btn-sm btn-primary">Register</a>
-    {{/if}}
-  </div>
+      {{#if isRegister}}
+        <a href="/register" class="btn btn-sm btn-outline-primary">Register</a>
+      {{else}}
+        <a href="/register" class="btn btn-sm btn-primary">Register</a>
+      {{/if}}
+    </div>
+  {{/if}}
 </header>
 </div>
