@@ -1,1 +1,38 @@
 <h1 class="text-white text-center">Homepage</h1>
+{{#if products.length}}
+<div class="container">
+    <div class="row g-3">
+        {{#each products}}
+        <div class="col-4">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <img src="{{image}}" class="card-img-top w-100" alt="image">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <p class="card-text">{{description}}</p>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="fw-bold text-white">{{price}}.00$</p>
+                        <div class="btn-group">
+                            
+                            <a href="/products/{{_id}}" class="btn btn-sm btn-primary">View</a>
+                            {{#if @root.token}}
+                                {{#ifequal userId @root.authId}} 
+                                    <a href="/add-product/{{_id}}" class="btn btn-sm btn-outline-success">Edit</a>
+                                    <a href="/delete-product/{{_id}}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                {{/ifequal}}                             
+                            {{/if}}
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+{{else}}
+<p class="text-white text-center mt-5 fw-bold fs-3 opacity">There are no products</p>
+{{/if}}
