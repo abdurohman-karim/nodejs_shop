@@ -2,25 +2,19 @@ import { Router } from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import {generateToken} from "../services/token.service.js";
+import registeredMiddleware from "../middleware/registered.js";
+
 
 const router = Router();
 
-router.get("/login", (req, res) => {
-    if(req.cookies.token) {
-        res.redirect('/')
-        return
-    }
+router.get("/login", registeredMiddleware, (req, res) => {
     res.render("login", {
         title: "Login | My Store",
         isLogin: true,
         loginError: req.flash('loginError')
     })
 })
-router.get("/register", (req, res) => {
-    if(req.cookies.token) {
-        res.redirect('/')
-        return
-    }
+router.get("/register", registeredMiddleware, (req, res) => {
     res.render("register", {
         title: "Register | My Store",
         isRegister: true,

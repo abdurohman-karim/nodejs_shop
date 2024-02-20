@@ -14,4 +14,10 @@
 
     
     <input type="submit" class="btn btn-primary w-25" value="Add Product">
+
+    {{#if addError}}
+        <div class="alert alert-danger mt-5 opacity" role="alert">
+            {{addError}}
+        </div>
+    {{/if}}
 </form>
