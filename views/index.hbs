@@ -17,10 +17,13 @@
                         <p class="fw-bold text-white">{{price}}.00$</p>
                         <div class="btn-group">
                             
-                            <a href="/products/{{_id}}" class="btn btn-sm btn-primary">View</a>
+                            <a href="/product/{{_id}}" class="btn btn-sm btn-primary">View</a>
                             {{#if @root.token}}
                                 {{#ifequal userId @root.authId}} 
-                                    <a href="/add-product/{{_id}}" class="btn btn-sm btn-outline-success">Edit</a>
+                                    <form action="/edit-product/{{_id}}" method="get">
+                                        <input type="hidden" name="id" value="{{_id}}">
+                                        <button class="btn btn-sm btn-outline-success" type="submit">Edit</button>
+                                    </form>
                                     <a href="/delete-product/{{_id}}" class="btn btn-sm btn-outline-danger">Delete</a>
                                 {{/ifequal}}                             
                             {{/if}}

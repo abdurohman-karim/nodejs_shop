@@ -1,0 +1,23 @@
+<form class=" mx-auto mt-5 d-flex flex-column align-items-center" action="/edit-product/{{product._id}}" method="POST">
+    <h1 class="h3 mb-3 fw-normal text-white">Product Edit</h1>
+    <input type="text" name="title" class="form-control w-25 mt-3 mb-2 bg-dark text-white" placeholder="Type name of product" value="{{product.title}}">
+    <div class="input-group mt-2 mb-2 w-25">
+        <span class="input-group-text bg-dark text-white" id="basic-addon1">$</span>
+        <input type="text" name="price" class="form-control bg-dark text-white" placeholder="Price" aria-label="Price" aria-describedby="basic-addon1" value="{{product.price}}">
+    </div>
+    <input name="image" class="form-control w-25 bg-dark text-white mt-2 mb-2" type="text" placeholder="Image URL" value="{{product.image}}">
+    <div class="form-floating w-25 mt-2 mb-3">
+        <textarea name="description" class="form-control bg-dark text-white" placeholder="Description" id="floatingTextarea2" style="height: 100px" >{{product.description}}</textarea>
+        <label for="floatingTextarea2" class="text-white">Description</label>
+    </div>
+    
+
+    
+    <input type="submit" class="btn btn-primary w-25" value="Add Product">
+
+    {{#if editError}}
+        <div class="alert alert-danger mt-5 opacity" role="alert">
+            {{editError}}
+        </div>
+    {{/if}}
+</form>

@@ -26,6 +26,7 @@ router.get('/products', (req, res) => {
     })
 })
 
+// Product Creation
 router.get('/add-product', authMiddleware, (req, res) => {
     res.render('add', {
         title: 'Add Product | My Store',
@@ -44,6 +45,26 @@ router.post('/add-product', userMiddleware, async (req, res) => {
     }
     await Product.create({...req.body, userId: req.userId})
     res.redirect('/products')
+})
+
+
+// Product Edit
+router.get('/edit-product/:id' , authMiddleware, async (req, res) => {
+    const product = await Product.findById(req.query.id).lean()
+    if(!product) {
+        res.redirect('/')
+        return
+    }
+    res.render('edit', {
+        title: 'Edit Product | My Store',
+        isProductEdit: true,
+        product
+    })
+})
+router.post('/edit-product/:id', userMiddleware, async (req, res) => {
+    const {title, description, price, image} = req.body
+    await Product.findByIdAndUpdate(req.params.id, {...req.body, userId: req.userId})
+    res.redirect('/')
 })
 
 export default router
