@@ -1,6 +1,8 @@
 import { Router } from "express";
+
 // Models 
 import Product from "../models/Product.js";
+
 // Middlewares
 import authMiddleware from '../middleware/auth.js'
 import userMiddleware from '../middleware/user.js'
@@ -9,20 +11,24 @@ const router = Router();
 
 
 router.get('/', async (req, res) => {
-    const products = await Product.find().lean()
+    const products = await Product.find().populate('userId').lean()
 
     res.render('index', {
         title: 'Home | My Store',
         isIndex: true,
-        authId: req.userId ? req.userId.toString() : 'YO`Q',
         products: products.reverse(),
+        authId: req.userId ? req.userId.toString() : null,
+        
     })
 })
 
-router.get('/products', (req, res) => {
+router.get('/products', async (req, res) => {
+    const user = req.userId ? req.userId.toString() : null,
+    myProducts = await Product.find({userId: user}).lean()
     res.render('products', {
         title: 'Products | My Store',
-        isProduct: true
+        isProduct: true,
+        myProducts: myProducts.reverse()
     })
 })
 
@@ -47,10 +53,25 @@ router.post('/add-product', userMiddleware, async (req, res) => {
     res.redirect('/products')
 })
 
+// Product Show 
+router.get('/product/:id', async (req, res) => {
+    const id = req.params.id
+    const product = await Product.findById(id).populate('userId').lean()
+    if(!product) {
+        res.redirect('/')
+        return
+    }
+    res.render('show', {
+        title: `${product.title} | My Store`,
+        product: product
+    })
+})
+
 
 // Product Edit
-router.get('/edit-product/:id' , authMiddleware, async (req, res) => {
-    const product = await Product.findById(req.query.id).lean()
+router.get('/edit-product/:id', authMiddleware, async (req, res) => {
+    const id = req.params.id
+    const product = await Product.findById(id).lean()
     if(!product) {
         res.redirect('/')
         return
@@ -61,9 +82,16 @@ router.get('/edit-product/:id' , authMiddleware, async (req, res) => {
         product
     })
 })
+
 router.post('/edit-product/:id', userMiddleware, async (req, res) => {
     const {title, description, price, image} = req.body
     await Product.findByIdAndUpdate(req.params.id, {...req.body, userId: req.userId})
+    res.redirect('/')
+})
+
+// Product Delete
+router.post('/delete-product/:id', authMiddleware, async (req, res) => {
+    await Product.findByIdAndDelete(req.params.id)
     res.redirect('/')
 })
 
